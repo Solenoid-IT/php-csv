@@ -36,7 +36,7 @@ $records =
 
 
 // (Getting the value)
-$file_content = ( new CSV( array_values( $records[0] ), $records ) )->build();
+$file_content = ( new CSV( array_keys( $records[0] ), $records ) )->build();
 
 
 
