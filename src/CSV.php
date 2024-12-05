@@ -32,7 +32,7 @@ class CSV
 
 
         // (Getting the value)
-        $encoded_value = str_replace( [ "\n", "\r", "\t", $enclosure, $escape ], [ "{$escape}n", "{$escape}r", "{$escape}t", "$escape{$enclosure}", "$escape{$escape}" ], $encoded_value );
+        $encoded_value = str_replace( [ $escape, "\n", "\r", "\t", $enclosure ], [ "{$escape}$escape", "{$escape}n", "{$escape}r", "{$escape}t", "$escape{$enclosure}" ], $encoded_value );
 
 
 
