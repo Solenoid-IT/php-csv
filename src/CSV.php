@@ -19,7 +19,7 @@ class CSV
 
 
     # Returns [string]
-    private static function encode_value (string $value, string $column_separator, string $enclosure, string $escape)
+    private static function encode (string $value, string $column_separator, string $enclosure, string $escape)
     {
         // (Getting the value)
         $encoded_value = $value;
@@ -48,6 +48,23 @@ class CSV
         return $encoded_value;
     }
 
+    # Returns [string]
+    private static function decode (string $value, string $column_separator, string $enclosure, string $escape)
+    {
+        // (Getting the value)
+        $decoded_value = $value;
+
+
+
+        // (Getting the value)
+        $decoded_value = str_replace( [ "{$escape}$escape", "{$escape}n", "{$escape}r", "{$escape}t", "$escape{$enclosure}" ], [ $escape, "\n", "\r", "\t", $enclosure ], $decoded_value );
+
+
+
+        // Returning the value
+        return $decoded_value;
+    }
+
 
 
     # Returns [self]
@@ -69,12 +86,12 @@ class CSV
         if ( $this->header )
         {// Value is not empty
             // (Appending the value)
-            $content[] = implode( $column_separator, array_map( function ($column_name) use ($column_separator, $enclosure, $escape) { return self::encode_value( $column_name, $column_separator, $enclosure, $escape ); }, $this->header ) );
+            $content[] = implode( $column_separator, array_map( function ($column_name) use ($column_separator, $enclosure, $escape) { return self::encode( $column_name, $column_separator, $enclosure, $escape ); }, $this->header ) );
 
             foreach ( $this->records as $record )
             {// Processing each entry
                 // (Appending the value)
-                $content[] = implode( $column_separator, array_map( function ($column_value) use ($column_separator, $enclosure, $escape) { return self::encode_value( $column_value, $column_separator, $enclosure, $escape ); }, array_values( $record ) ) );
+                $content[] = implode( $column_separator, array_map( function ($column_value) use ($column_separator, $enclosure, $escape) { return self::encode( $column_value, $column_separator, $enclosure, $escape ); }, array_values( $record ) ) );
             }
         }
         else
@@ -82,7 +99,7 @@ class CSV
             foreach ( $this->records as $record )
             {// Processing each entry
                 // (Appending the value)
-                $content[] = implode( $column_separator, array_map( function ($column_value) use ($column_separator, $enclosure, $escape) { return self::encode_value( $column_value, $column_separator, $enclosure, $escape ); }, array_values( $record ) ) );
+                $content[] = implode( $column_separator, array_map( function ($column_value) use ($column_separator, $enclosure, $escape) { return self::encode( $column_value, $column_separator, $enclosure, $escape ); }, array_values( $record ) ) );
             }
         }
 
@@ -118,7 +135,7 @@ class CSV
 
 
             // (Getting the value)
-            $values = str_getcsv( $line, $column_separator, $enclosure, $escape );
+            $values = array_map( function ($value) use ($column_separator, $enclosure, $escape) { return self::decode( $value, $column_separator, $enclosure, $escape ); }, str_getcsv( $line, $column_separator, $enclosure, $escape ) );
 
             #if ( count( $values ) === 1 && strlen( $values[0] ) === 0 ) continue;
 
