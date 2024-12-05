@@ -19,7 +19,7 @@ $records =
         'sender'   => 'john.doe@gmail.com',
         'receiver' => 'livia.johnson@hotmail.ca',
 
-        'message'  => "Welcome \"Livia\" to our portal !\n\nThis week we talk about our company policies.",
+        'message'  => "Welcome \"Livia\" to our portal !\n\nThis week we talk about our company policies;",
         'datetime' => date( 'c', $ts )
     ],
 
