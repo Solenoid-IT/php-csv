@@ -261,16 +261,36 @@ class CSV
 
 
 
+        // (Setting the values)
+        $min = false;
+        $sep = false;
+
         foreach ( $separators as $separator )
         {// Processing each entry
             for ( $i = 0; $i < count( $results ) - 1; $i++ )
             {// Iterating each index
-                if ( $results[ $i ][$separator] === $results[ $i + 1 ][$separator] )
+                if ( $results[ $i ][$separator] === 0 && $results[ $i + 1 ][$separator] === 0 ) continue;
+
+
+
+                // (Getting the value)
+                $diff = abs( $results[ $i ][$separator] - $results[ $i + 1 ][$separator] );
+
+                if ( $min === false || $diff < $min )
                 {// Match OK
-                    // Returning the value
-                    return $separator;
+                    // (Getting the values)
+                    $min = $diff;
+                    $sep = $separator;
                 }
             }
+        }
+
+
+
+        if ( $sep )
+        {// Value found
+            // Returning the value
+            return $sep;
         }
 
 
